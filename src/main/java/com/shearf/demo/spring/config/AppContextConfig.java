@@ -2,7 +2,14 @@ package com.shearf.demo.spring.config;
 
 import com.shearf.demo.spring.domain.Author;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.*;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.DelegatingMessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -16,7 +23,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @PropertySource("classpath:application.properties")
 //@EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableTransactionManagement
-public class AppContextConfig {
+public class AppContextConfig implements EnvironmentAware {
 
     @Value("${author.username}")
     private String username;
@@ -31,4 +38,9 @@ public class AppContextConfig {
         author.setEmail(email);
         return author;
     }
+
+    @Override
+    public void setEnvironment(Environment environment) {
+    }
+
 }

@@ -1,12 +1,16 @@
 package com.shearf.demo.spring.config;
 
+import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.google.common.collect.Lists;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.validation.MessageCodesResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -28,7 +32,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(mappingJackson2HttpMessageConverter());
+//        converters.add(mappingJackson2HttpMessageConverter());
+        converters.add(fastJsonHttpMessageConverter());
     }
 
     @Bean
@@ -39,5 +44,22 @@ public class WebConfig extends WebMvcConfigurerAdapter {
                 MediaType.APPLICATION_JSON
         ));
         return new MappingJackson2HttpMessageConverter();
+    }
+
+    private FastJsonHttpMessageConverter fastJsonHttpMessageConverter() {
+        FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter();
+        fastJsonHttpMessageConverter.setDefaultCharset(utf8Charset());
+        return fastJsonHttpMessageConverter;
+    }
+
+    @Bean
+    public MessageSource messageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setBasenames(
+                "classpath:messages/info",
+                "classpath:messages/user"
+        );
+        return messageSource;
     }
 }
