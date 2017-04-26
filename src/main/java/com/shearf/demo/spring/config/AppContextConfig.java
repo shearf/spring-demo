@@ -9,6 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.DelegatingMessageSource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -41,6 +42,19 @@ public class AppContextConfig implements EnvironmentAware {
 
     @Override
     public void setEnvironment(Environment environment) {
+    }
+
+
+    @Bean("messageSource")
+    public MessageSource messageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setBasenames("message");
+//        messageSource.setBasenames(
+//                "classpath:messages/info",
+//                "classpath:messages/user"
+//        );
+        return messageSource;
     }
 
 }

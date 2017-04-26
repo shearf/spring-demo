@@ -5,5 +5,5 @@ package com.shearf.demo.spring.service;
  */
 public interface MessageService {
 
-    void showEnv();
+    String showEnv();
 }

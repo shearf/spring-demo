@@ -15,7 +15,7 @@ public class MessageServiceImpl implements MessageService {
     private MessageSource messageSource;
 
     @Override
-    public void showEnv() {
-        messageSource.getMessage("env.dev", null, "default", null);
+    public String showEnv() {
+        return messageSource.getMessage("env.dev", null, "default", null);
     }
 }

@@ -52,14 +52,5 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return fastJsonHttpMessageConverter;
     }
 
-    @Bean
-    public MessageSource messageSource() {
-        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setDefaultEncoding("UTF-8");
-        messageSource.setBasenames(
-                "classpath:messages/info",
-                "classpath:messages/user"
-        );
-        return messageSource;
-    }
+
 }
