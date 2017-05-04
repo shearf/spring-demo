@@ -6,9 +6,11 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.validation.MessageCodesResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -23,6 +25,7 @@ import java.util.List;
 @Configuration
 @ComponentScan(value = "com.shearf.demo.spring.web")
 @EnableWebMvc
+//@EnableAspectJAutoProxy(exposeProxy = true)
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Bean
@@ -33,9 +36,13 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 //        converters.add(mappingJackson2HttpMessageConverter());
+        converters.add(stringHttpMessageConverter());
         converters.add(fastJsonHttpMessageConverter());
     }
 
+    public StringHttpMessageConverter stringHttpMessageConverter() {
+        return new StringHttpMessageConverter(utf8Charset());
+    }
     @Bean
     public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
         MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();

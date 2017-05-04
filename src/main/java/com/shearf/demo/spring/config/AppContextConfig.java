@@ -1,18 +1,22 @@
 package com.shearf.demo.spring.config;
 
 import com.shearf.demo.spring.domain.Author;
+import com.shearf.demo.spring.domain.Blog;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.DelegatingMessageSource;
+import org.springframework.context.annotation.*;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
+import org.springframework.format.datetime.DateFormatter;
+import org.springframework.format.datetime.DateFormatterRegistrar;
+import org.springframework.format.number.NumberFormatAnnotationFormatterFactory;
+import org.springframework.format.support.DefaultFormattingConversionService;
+import org.springframework.format.support.FormattingConversionService;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import java.util.Date;
 
 /**
  * Created by xiahaihu on 17/4/21.
@@ -22,7 +26,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         classes = {EnableWebMvc.class}
 ))
 @PropertySource("classpath:application.properties")
-//@EnableAspectJAutoProxy(proxyTargetClass = true)
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableTransactionManagement
 public class AppContextConfig implements EnvironmentAware {
 
@@ -55,6 +59,14 @@ public class AppContextConfig implements EnvironmentAware {
 //                "classpath:messages/user"
 //        );
         return messageSource;
+    }
+
+    @Bean
+    public Blog defaultBlog() {
+        Blog blog = new Blog();
+        blog.setCreateTime(new Date());
+        blog.setTitle("Default Blog For Test");
+        return blog;
     }
 
 }
