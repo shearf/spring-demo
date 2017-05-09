@@ -1,11 +1,18 @@
 package com.shearf.demo.spring.config;
 
+import com.shearf.demo.spring.advice.BeforeUserAdvice;
 import com.shearf.demo.spring.domain.Author;
 import com.shearf.demo.spring.domain.Blog;
+import com.shearf.demo.spring.interceptor.DebugInterceptor;
+import org.springframework.aop.support.DefaultPointcutAdvisor;
+import org.springframework.aop.support.JdkRegexpMethodPointcut;
+import org.springframework.aop.support.RegexpMethodPointcutAdvisor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.format.datetime.DateFormatter;
@@ -28,6 +35,8 @@ import java.util.Date;
 @PropertySource("classpath:application.properties")
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableTransactionManagement
+@ImportResource(locations = "classpath:beans.xml")
+//@EnableSpringConfigured
 public class AppContextConfig implements EnvironmentAware {
 
     @Value("${author.username}")
@@ -43,6 +52,9 @@ public class AppContextConfig implements EnvironmentAware {
         author.setEmail(email);
         return author;
     }
+
+//    @Autowired
+//    private DebugInterceptor debugInterceptor;
 
     @Override
     public void setEnvironment(Environment environment) {
@@ -68,5 +80,43 @@ public class AppContextConfig implements EnvironmentAware {
         blog.setTitle("Default Blog For Test");
         return blog;
     }
+
+    @Bean
+    public FormattingConversionService conversionService() {
+        DefaultFormattingConversionService conversionService = new DefaultFormattingConversionService(false);
+
+        conversionService.addFormatterForFieldAnnotation(new NumberFormatAnnotationFormatterFactory());
+
+        DateFormatterRegistrar registrar = new DateFormatterRegistrar();
+        registrar.setFormatter(new DateFormatter("yyyy-MM-dd HH:mm:ss"));
+        registrar.registerFormatters(conversionService);
+
+        return conversionService;
+    }
+
+    @Bean
+    public RegexpMethodPointcutAdvisor userInfoAdvisor() {
+        RegexpMethodPointcutAdvisor advisor = new RegexpMethodPointcutAdvisor();
+        advisor.setPattern("com.shearf.demo.spring.service.impl.UserServiceImpl.info");
+        advisor.setAdvice(new BeforeUserAdvice());
+        return advisor;
+    }
+
+    @Bean
+    public JdkRegexpMethodPointcut userInfoPointcut() {
+        JdkRegexpMethodPointcut pointcut = new JdkRegexpMethodPointcut();
+        pointcut.setPattern("com.shearf.demo.spring.service.impl.UserServiceImpl.info");
+        return pointcut;
+    }
+
+    @Bean
+    public DefaultPointcutAdvisor userInfoAdvisor2() {
+        DefaultPointcutAdvisor advisor = new DefaultPointcutAdvisor();
+        advisor.setPointcut(userInfoPointcut());
+//        advisor.setAdvice(new BeforeUserAdvice());
+        advisor.setAdvice(new DebugInterceptor());
+        return advisor;
+    }
+
 
 }

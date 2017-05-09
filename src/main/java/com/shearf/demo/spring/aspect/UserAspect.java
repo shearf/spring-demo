@@ -1,5 +1,6 @@
 package com.shearf.demo.spring.aspect;
 
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -23,4 +24,5 @@ public class UserAspect {
     public void before(int id) {
         System.out.println("Called UserService info before, args:" + id);
     }
+
 }
