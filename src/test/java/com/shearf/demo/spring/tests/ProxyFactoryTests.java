@@ -25,6 +25,7 @@ public class ProxyFactoryTests {
         factory.addAdvice(new BeforeMethod());
         SimplePojo simplePojo = (SimplePojo) factory.getProxy();
         simplePojo.foo();
+
     }
 
 
