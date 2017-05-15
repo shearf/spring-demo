@@ -4,6 +4,10 @@ import com.shearf.demo.spring.advice.BeforeUserAdvice;
 import com.shearf.demo.spring.domain.Author;
 import com.shearf.demo.spring.domain.Blog;
 import com.shearf.demo.spring.interceptor.DebugInterceptor;
+import com.shearf.demo.spring.interceptor.LockMixin;
+import com.shearf.demo.spring.service.PersonService;
+import com.shearf.demo.spring.service.impl.PersonServiceImpl;
+import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.JdkRegexpMethodPointcut;
 import org.springframework.aop.support.RegexpMethodPointcutAdvisor;
@@ -33,7 +37,7 @@ import java.util.Properties;
         classes = {EnableWebMvc.class}
 ))
 @PropertySource("classpath:application.properties")
-@EnableAspectJAutoProxy
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableTransactionManagement
 @ImportResource(locations = "classpath:beans.xml")
 //@EnableSpringConfigured
@@ -58,6 +62,8 @@ public class AppContextConfig implements EnvironmentAware {
 
     @Override
     public void setEnvironment(Environment environment) {
+
+
     }
 
 
@@ -109,17 +115,46 @@ public class AppContextConfig implements EnvironmentAware {
         return pointcut;
     }
 
-    @Bean
-    public DefaultPointcutAdvisor userInfoAdvisor2() {
-        DefaultPointcutAdvisor advisor = new DefaultPointcutAdvisor();
-        advisor.setPointcut(userInfoPointcut());
+//    @Bean
+//    public DefaultPointcutAdvisor userInfoAdvisor2() {
+//        DefaultPointcutAdvisor advisor = new DefaultPointcutAdvisor();
+//        advisor.setPointcut(userInfoPointcut());
 //        advisor.setAdvice(new BeforeUserAdvice());
-        advisor.setAdvice(new DebugInterceptor());
-        return advisor;
+//        advisor.setAdvice(new DebugInterceptor());
+//        return advisor;
+//    }
+
+    // Register as default interceptor
+//    @Bean
+//    public DefaultPointcutAdvisor lockMixinInterceptor() {
+//        DefaultPointcutAdvisor advisor = new DefaultPointcutAdvisor();
+//        advisor.setAdvice(new LockMixin());
+//        return advisor;
+//    }
+
+    @Bean
+    public PersonService personTarget() {
+        PersonServiceImpl person = new PersonServiceImpl();
+        person.setAge(18);
+        person.setName("shearf");
+        return person;
     }
 
+    @Bean
+    public ProxyFactoryBean person() {
 
-    @Bean()
+        ProxyFactoryBean proxyFactoryBean = new ProxyFactoryBean();
+        proxyFactoryBean.setTarget(personTarget());
+        try {
+            proxyFactoryBean.setProxyInterfaces(new Class[]{PersonService.class});
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        proxyFactoryBean.setInterceptorNames("debugInterceptor");
+        return proxyFactoryBean;
+    }
+
+    /*
     public TransactionProxyFactoryBean txProxyTemplate() {
         TransactionProxyFactoryBean factoryBean = new TransactionProxyFactoryBean();
 //        factoryBean.setTransactionManager();
@@ -128,6 +163,7 @@ public class AppContextConfig implements EnvironmentAware {
         factoryBean.setTransactionAttributes(properties);
         return factoryBean;
     }
+    */
 
 
 }

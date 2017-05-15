@@ -1,6 +1,5 @@
 package com.shearf.demo.spring.web.controller;
 
-import com.shearf.demo.spring.service.AuthorService;
 import com.shearf.demo.spring.service.UserService;
 import com.shearf.demo.spring.service.impl.AuthorServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthorController {
 
     @Autowired
-    private AuthorServiceImpl authorService;
+    private AuthorServiceImpl authorService;       // 如果不使用proxyTargetClass=true，bean无法创建
 
 
     @GetMapping("")

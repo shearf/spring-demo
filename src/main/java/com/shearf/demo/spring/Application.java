@@ -4,6 +4,7 @@ import com.shearf.demo.spring.config.AppContextConfig;
 import com.shearf.demo.spring.domain.Author;
 import com.shearf.demo.spring.domain.Blog;
 import com.shearf.demo.spring.domain.Info;
+import com.shearf.demo.spring.service.PersonService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
@@ -28,6 +29,10 @@ public class Application {
         System.out.println(author.getEmail());
         System.out.println(info.getEnv());
         System.out.println(info.getVersion());
+
+
+        PersonService personService = (PersonService) applicationContext.getBean("person");
+        System.out.println(personService.getName());
 
     }
 
