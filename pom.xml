@@ -22,6 +22,10 @@
         <commons-lang3.version>3.4</commons-lang3.version>
         <aspect.version>1.8.9</aspect.version>
         <file.encoding>UTF-8</file.encoding>
+        <htmlunit.version>2.26</htmlunit.version>
+        <druid.version>1.0.24</druid.version>
+        <mysql-connector-java.version>5.1.40</mysql-connector-java.version>
+        <testng.version>6.8</testng.version>
 
         <maven_test_skip>true</maven_test_skip>
     </properties>
@@ -75,6 +79,19 @@
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons-lang3.version}</version>
             </dependency>
+
+            <!-- database -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql-connector-java.version}</version>
+            </dependency>
+
             <!-- aop -->
             <dependency>
                 <groupId>org.aspectj</groupId>
@@ -93,6 +110,18 @@
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
             </dependency>
+            <dependency>
+                <groupId>net.sourceforge.htmlunit</groupId>
+                <artifactId>htmlunit</artifactId>
+                <version>${htmlunit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.testng</groupId>
+                <artifactId>testng</artifactId>
+                <version>${testng.version}</version>
+            </dependency>
+
+
         </dependencies>
     </dependencyManagement>
 
@@ -118,6 +147,14 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -133,6 +170,16 @@
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
+        </dependency>
+
+        <!-- database -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
 
@@ -174,10 +221,16 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aspects</artifactId>
-            <version>${springframework.version}</version>
+            <groupId>net.sourceforge.htmlunit</groupId>
+            <artifactId>htmlunit</artifactId>
+            <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 

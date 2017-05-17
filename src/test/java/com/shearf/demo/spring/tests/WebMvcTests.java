@@ -46,6 +46,7 @@ public class WebMvcTests {
     @Test
     public void searchTest() {
         try {
+
             Map<String, Object> map = new HashMap<>();
             map.put("enable", 1);
             ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/search"));

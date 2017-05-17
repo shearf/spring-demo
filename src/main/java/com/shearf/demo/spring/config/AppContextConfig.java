@@ -23,6 +23,7 @@ import org.springframework.format.number.NumberFormatAnnotationFormatterFactory;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionProxyFactoryBean;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -115,14 +116,14 @@ public class AppContextConfig implements EnvironmentAware {
         return pointcut;
     }
 
-//    @Bean
-//    public DefaultPointcutAdvisor userInfoAdvisor2() {
-//        DefaultPointcutAdvisor advisor = new DefaultPointcutAdvisor();
-//        advisor.setPointcut(userInfoPointcut());
+    @Bean
+    public DefaultPointcutAdvisor userInfoAdvisor2() {
+        DefaultPointcutAdvisor advisor = new DefaultPointcutAdvisor();
+        advisor.setPointcut(userInfoPointcut());
 //        advisor.setAdvice(new BeforeUserAdvice());
-//        advisor.setAdvice(new DebugInterceptor());
-//        return advisor;
-//    }
+        advisor.setAdvice(new DebugInterceptor());
+        return advisor;
+    }
 
     // Register as default interceptor
 //    @Bean
@@ -153,6 +154,8 @@ public class AppContextConfig implements EnvironmentAware {
         proxyFactoryBean.setInterceptorNames("debugInterceptor");
         return proxyFactoryBean;
     }
+
+
 
     /*
     public TransactionProxyFactoryBean txProxyTemplate() {
