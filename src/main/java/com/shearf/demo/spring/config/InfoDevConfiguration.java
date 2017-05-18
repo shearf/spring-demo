@@ -9,7 +9,7 @@ import org.springframework.core.env.Environment;
 /**
  * Created by xiahaihu on 17/4/21.
  */
-@Configuration
+//@Configuration
 @Profile("dev")
 @PropertySource("classpath:info-dev.properties")
 public class InfoDevConfiguration {

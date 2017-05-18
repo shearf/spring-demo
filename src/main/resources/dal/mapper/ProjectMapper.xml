@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shearf.demo.spring.dal.mapper.ProjectMapper" >
+    <resultMap id="BaseResultMap" type="com.shearf.demo.spring.domain.entity.Project">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="CHAR" />
+        <result column="repo" property="repo" jdbcType="VARCHAR" />
+        <result column="repo_link" property="repoLink" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="CHAR" />
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+        <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        `name`, `type`, `repo`, `repo_link`, `status`, `created_at`, `updated_at`
+    </sql>
+    <insert id="insertSelective" parameterType="com.shearf.demo.spring.domain.entity.Project" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `projects`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                `id`,
+            </if>
+            <if test="name != null">
+                `name`,
+            </if>
+            <if test="type != null">
+                `type`,
+            </if>
+            <if test="repo != null">
+                `repo`,
+            </if>
+            <if test="repoLink != null">
+                `repo_link`,
+            </if>
+            <if test="status != null">
+                `status`,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id, jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name, jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type, jdbcType=CHAR},
+            </if>
+            <if test="repo != null">
+                #{repo, jdbcType=VARCHAR},
+            </if>
+            <if test="repoLink != null">
+                #{repoLink, jdbcType=VARCHAR},
+            </if>
+            <if test="createdAt != null">
+                #{createdAt, jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedAt != null">
+                #{updatedAt, jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM `projects`
+    </select>
+
+</mapper>

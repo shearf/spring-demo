@@ -4,17 +4,18 @@ import com.shearf.demo.spring.advice.BeforeUserAdvice;
 import com.shearf.demo.spring.domain.Author;
 import com.shearf.demo.spring.domain.Blog;
 import com.shearf.demo.spring.interceptor.DebugInterceptor;
-import com.shearf.demo.spring.interceptor.LockMixin;
 import com.shearf.demo.spring.service.PersonService;
 import com.shearf.demo.spring.service.impl.PersonServiceImpl;
 import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.JdkRegexpMethodPointcut;
 import org.springframework.aop.support.RegexpMethodPointcutAdvisor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.format.datetime.DateFormatter;
@@ -23,12 +24,9 @@ import org.springframework.format.number.NumberFormatAnnotationFormatterFactory;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionProxyFactoryBean;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.Date;
-import java.util.Properties;
 
 /**
  * Created by xiahaihu on 17/4/21.
@@ -37,12 +35,14 @@ import java.util.Properties;
 @ComponentScan(basePackages = "com.shearf.demo.spring", excludeFilters = @ComponentScan.Filter(
         classes = {EnableWebMvc.class}
 ))
-@PropertySource("classpath:application.properties")
+@PropertySources({
+        @PropertySource("classpath:application.properties"),
+//        @PropertySource("classpath:database.properties")
+})
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableTransactionManagement
 @ImportResource(locations = "classpath:beans.xml")
-//@EnableSpringConfigured
-public class AppContextConfig implements EnvironmentAware {
+public class AppContextConfig {
 
     @Value("${author.username}")
     private String username;
@@ -55,18 +55,18 @@ public class AppContextConfig implements EnvironmentAware {
         Author author = new Author();
         author.setUsername(username);
         author.setEmail(email);
+
+        System.out.println(environment.getProperty("author.email"));
+        System.out.println(environment.getProperty("author.username"));
+
         return author;
     }
 
+    @Autowired
+    private Environment environment;
+
 //    @Autowired
 //    private DebugInterceptor debugInterceptor;
-
-    @Override
-    public void setEnvironment(Environment environment) {
-
-
-    }
-
 
     @Bean("messageSource")
     public MessageSource messageSource() {
@@ -168,5 +168,9 @@ public class AppContextConfig implements EnvironmentAware {
     }
     */
 
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
 
 }

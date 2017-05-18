@@ -12,7 +12,7 @@ import org.springframework.core.env.Environment;
 /**
  * Created by xiahaihu on 17/4/21.
  */
-@Configuration
+//@Configuration
 @Profile("test")
 @PropertySource("classpath:info-test.properties")
 public class InfoTestConfiguration {

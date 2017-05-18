@@ -1,5 +1,6 @@
 package com.shearf.demo.spring.web.controller;
 
+import com.shearf.demo.spring.domain.Author;
 import com.shearf.demo.spring.service.UserService;
 import com.shearf.demo.spring.service.impl.AuthorServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public class AuthorController {
     @Autowired
     private AuthorServiceImpl authorService;       // 如果不使用proxyTargetClass=true，bean无法创建
 
+    @Autowired
+    private Author author;
+
 
     @GetMapping("")
     public String index() {
@@ -25,4 +29,10 @@ public class AuthorController {
         System.out.println(authorService instanceof UserService);
         return "index";
     }
+
+    @GetMapping("info")
+    public Author info() {
+        return author;
+    }
+
 }
