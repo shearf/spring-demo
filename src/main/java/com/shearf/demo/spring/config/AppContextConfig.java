@@ -10,8 +10,6 @@ import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.JdkRegexpMethodPointcut;
 import org.springframework.aop.support.RegexpMethodPointcutAdvisor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
@@ -35,38 +33,13 @@ import java.util.Date;
 @ComponentScan(basePackages = "com.shearf.demo.spring", excludeFilters = @ComponentScan.Filter(
         classes = {EnableWebMvc.class}
 ))
-@PropertySources({
-        @PropertySource("classpath:application.properties"),
-//        @PropertySource("classpath:database.properties")
-})
+@PropertySource("classpath:application.properties")
 @EnableAspectJAutoProxy(proxyTargetClass = true)
-@EnableTransactionManagement
+@EnableTransactionManagement(proxyTargetClass = true)
 @ImportResource(locations = "classpath:beans.xml")
-public class AppContextConfig {
+public class AppContextConfig implements EnvironmentAware {
 
-    @Value("${author.username}")
-    private String username;
-
-    @Value("${author.email}")
-    private String email;
-
-    @Bean(initMethod = "init")
-    public Author author() {
-        Author author = new Author();
-        author.setUsername(username);
-        author.setEmail(email);
-
-        System.out.println(environment.getProperty("author.email"));
-        System.out.println(environment.getProperty("author.username"));
-
-        return author;
-    }
-
-    @Autowired
     private Environment environment;
-
-//    @Autowired
-//    private DebugInterceptor debugInterceptor;
 
     @Bean("messageSource")
     public MessageSource messageSource() {
@@ -86,6 +59,14 @@ public class AppContextConfig {
         blog.setCreateTime(new Date());
         blog.setTitle("Default Blog For Test");
         return blog;
+    }
+
+    @Bean
+    public Author defaultAuthor() {
+        Author author = new Author();
+        author.setUsername(environment.getProperty("author.username"));
+        author.setEmail(environment.getProperty("author.email"));
+        return author;
     }
 
     @Bean
@@ -173,4 +154,12 @@ public class AppContextConfig {
         return new PropertySourcesPlaceholderConfigurer();
     }
 
+    /**
+     * 代替@Autowired private Environment environment
+     * @param environment
+     */
+    @Override
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
+    }
 }

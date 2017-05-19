@@ -24,6 +24,9 @@
             <if test="name != null">
                 `name`,
             </if>
+            <if test="description != null">
+                `description`,
+            </if>
             <if test="type != null">
                 `type`,
             </if>
@@ -36,6 +39,12 @@
             <if test="status != null">
                 `status`,
             </if>
+            <if test="createdAt != null">
+                `created_at`,
+            </if>
+            <if test="updatedAt != null">
+                `updated_at`,
+            </if>
         </trim>
         VALUES
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -45,6 +54,9 @@
             <if test="name != null">
                 #{name, jdbcType=VARCHAR},
             </if>
+            <if test="description != null">
+                #{description, jdbcType=VARCHAR},
+            </if>
             <if test="type != null">
                 #{type, jdbcType=CHAR},
             </if>
@@ -53,6 +65,9 @@
             </if>
             <if test="repoLink != null">
                 #{repoLink, jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status, jdbcType=CHAR},
             </if>
             <if test="createdAt != null">
                 #{createdAt, jdbcType=TIMESTAMP},

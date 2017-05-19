@@ -23,11 +23,10 @@ import org.springframework.web.context.WebApplicationContext;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 
 /**
  * Created by xiahaihu on 17/5/16.

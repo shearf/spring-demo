@@ -2,17 +2,16 @@ package com.shearf.demo.spring.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import org.mybatis.spring.SqlSessionFactoryBean;
-import org.mybatis.spring.mapper.MapperScannerConfigurer;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -23,6 +22,7 @@ import java.sql.SQLException;
  */
 @Configuration
 @PropertySource("classpath:database.properties")
+@MapperScan(basePackages = "com.shearf.demo.spring.dal.mapper", annotationClass = Repository.class)
 public class DruidDatasourceConfiguration implements EnvironmentAware {
 
     @Value("${database.driver-class-name}")
@@ -35,9 +35,6 @@ public class DruidDatasourceConfiguration implements EnvironmentAware {
     public DruidDataSource dataSource() {
 
 //        PropertyResolver propertyResolver = new PropertySourcesPropertyResolver();
-
-        System.out.println(driverClassName);
-        System.out.println(username);
 
         DruidDataSource dataSource = new DruidDataSource();
         dataSource.setDriverClassName(environment.getProperty("database.driver-class-name"));
@@ -88,15 +85,14 @@ public class DruidDatasourceConfiguration implements EnvironmentAware {
         return sessionFactory;
     }
 
-    @Bean
-    @Lazy
-    public MapperScannerConfigurer mapperScannerConfigurer() {
-        MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
-        mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactory");
-        mapperScannerConfigurer.setAnnotationClass(org.springframework.stereotype.Repository.class);
-        mapperScannerConfigurer.setBasePackage("com.shearf.demo.spring.dal.mapper");
-        return mapperScannerConfigurer;
-    }
+//    @Bean
+//    public MapperScannerConfigurer mapperScannerConfigurer() {
+//        MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
+//        mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactory");
+//        mapperScannerConfigurer.setAnnotationClass(org.springframework.stereotype.Repository.class);
+//        mapperScannerConfigurer.setBasePackage("com.shearf.demo.spring.dal.mapper");
+//        return mapperScannerConfigurer;
+//    }
 
 //    @Autowired
     private Environment environment;
