@@ -14,7 +14,7 @@ public interface ProjectService {
 
     List<Project> listAll();
 
-    int insertBatch(List<Project> projects) throws Exception;
+    int insertBatch(List<Project> projects);
 
-    int proxyInsertBatch(List<Project> projects) throws Exception;
+    int proxyInsertBatch(List<Project> projects);
 }

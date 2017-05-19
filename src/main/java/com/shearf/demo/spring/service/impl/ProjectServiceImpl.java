@@ -5,6 +5,7 @@ import com.shearf.demo.spring.domain.entity.Project;
 import com.shearf.demo.spring.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -29,19 +30,30 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public int insertBatch(List<Project> projects) throws Exception {
+    @Transactional
+    public int insertBatch(List<Project> projects) {
 
         int result = 0;
         for (Project project : projects) {
             result += projectMapper.insertSelective(project);
-            throw new Exception("xxxx");
         }
         return result;
     }
 
     @Override
-    public int proxyInsertBatch(List<Project> projects) throws Exception {
-        return this.insertBatch(projects);
+    @Transactional
+    public int proxyInsertBatch(List<Project> projects) {
+
+        try {
+            this.insertBatch(projects);
+        } catch (Exception e) {
+        }
+
+        Project project = projects.get(0);
+        project.setId(project.getId() + 10);
+        project.setName("test1");
+
+        save(project);
+        return 0;
     }
 }
