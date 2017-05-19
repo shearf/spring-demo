@@ -2,7 +2,6 @@ package com.shearf.demo.spring.service.impl;
 
 import com.shearf.demo.spring.dal.mapper.ProjectMapper;
 import com.shearf.demo.spring.domain.entity.Project;
-import com.shearf.demo.spring.exception.DemoRuntimeException;
 import com.shearf.demo.spring.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,20 +29,19 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    @Transactional
-    public int insertBatch(List<Project> projects) {
+    @Transactional(rollbackFor = Exception.class)
+    public int insertBatch(List<Project> projects) throws Exception {
 
         int result = 0;
         for (Project project : projects) {
             result += projectMapper.insertSelective(project);
-//            throw new Exception("xxxx");
-            throw new DemoRuntimeException("runtime exception");
+            throw new Exception("xxxx");
         }
         return result;
     }
 
     @Override
-    public int proxyInsertBatch(List<Project> projects) {
+    public int proxyInsertBatch(List<Project> projects) throws Exception {
         return this.insertBatch(projects);
     }
 }
