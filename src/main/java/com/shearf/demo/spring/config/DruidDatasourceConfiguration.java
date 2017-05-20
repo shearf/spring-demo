@@ -3,6 +3,7 @@ package com.shearf.demo.spring.config;
 import com.alibaba.druid.pool.DruidDataSource;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
+import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
@@ -85,14 +86,22 @@ public class DruidDatasourceConfiguration implements EnvironmentAware {
         return sessionFactory;
     }
 
-//    @Bean
-//    public MapperScannerConfigurer mapperScannerConfigurer() {
-//        MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
-//        mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactory");
-//        mapperScannerConfigurer.setAnnotationClass(org.springframework.stereotype.Repository.class);
-//        mapperScannerConfigurer.setBasePackage("com.shearf.demo.spring.dal.mapper");
-//        return mapperScannerConfigurer;
-//    }
+    /**
+     * The problem comes down to the fact that MapperScannerConfigurer is a BeanDefinitionRegistryPostProcessor.
+     * As it turns out, this is the same mechanism used to process the @Configuration files and register the @Bean annotated methods.
+     * Unfortunately, one BeanDefinitionRegistryPostProcessor cannot make use of another,
+     * according to this Spring Jira ticket: https://jira.springsource.org/browse/SPR-7868
+     *
+     * importResource to add bean xml to configure MapperScannerConfigurer or simply to use @MapperScan
+     * @return
+     */
+    public MapperScannerConfigurer mapperScannerConfigurer() {
+        MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
+        mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactory");
+        mapperScannerConfigurer.setAnnotationClass(org.springframework.stereotype.Repository.class);
+        mapperScannerConfigurer.setBasePackage("com.shearf.demo.spring.dal.mapper");
+        return mapperScannerConfigurer;
+    }
 
 //    @Autowired
     private Environment environment;
@@ -101,4 +110,9 @@ public class DruidDatasourceConfiguration implements EnvironmentAware {
     public void setEnvironment(Environment environment) {
         this.environment = environment;
     }
+
+//    @Override
+//    public void setEnvironment(Environment environment) {
+//        this.environment = environment;
+//    }
 }
