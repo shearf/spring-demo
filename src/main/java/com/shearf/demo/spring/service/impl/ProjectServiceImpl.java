@@ -5,7 +5,6 @@ import com.shearf.demo.spring.domain.entity.Project;
 import com.shearf.demo.spring.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
